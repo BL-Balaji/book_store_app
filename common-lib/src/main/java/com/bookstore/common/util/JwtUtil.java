@@ -13,13 +13,14 @@ import java.util.function.Function;
 
 /**
  * JWT Utility class for token generation and validation
- * 
+ * Compatible with jjwt 0.11.5
+ *
  * @author BL Balaji
  */
 public class JwtUtil {
 
     private static final String SECRET_KEY = "bookstore-secret-key-for-jwt-token-generation-minimum-256-bits";
-    private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000; // 24 hours
+    private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000L; // 24 hours
 
     private static Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -34,8 +35,7 @@ public class JwtUtil {
     }
 
     public static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        return claimsResolver.apply(extractAllClaims(token));
     }
 
     private static Claims extractAllClaims(String token) {
@@ -46,7 +46,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    private static Boolean isTokenExpired(String token) {
+    private static boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -66,13 +66,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static Boolean validateToken(String token, String username) {
+    public static boolean validateToken(String token, String username) {
         final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+        return extractedUsername.equals(username) && !isTokenExpired(token);
     }
 
     public static String extractRole(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("role", String.class);
+        return extractAllClaims(token).get("role", String.class);
     }
 }

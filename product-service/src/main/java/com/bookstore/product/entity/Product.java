@@ -1,31 +1,19 @@
 package com.bookstore.product.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Product Entity
- * 
- * @author BL Balaji
- */
 @Entity
 @Table(name = "products")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -56,14 +44,17 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
 
+    @Builder.Default
     private Double averageRating = 0.0;
+
+    @Builder.Default
     private Integer totalReviews = 0;
 
-    @CreationTimestamp
-    @Column(updatable = false)
+    @CreationTimestamp @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
