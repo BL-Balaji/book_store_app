@@ -1,0 +1,16 @@
+server:
+  port: 8086
+spring:
+  application:
+    name: customer-details-service
+  datasource:
+    url: jdbc:postgresql://localhost:5436/customer_db
+    username: bookstore
+    password: bookstore123
+  jpa:
+    hibernate:
+      ddl-auto: update
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
